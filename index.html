@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>端午文化互动海报</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/addons/p5.sound.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E6B3A', // 端午节绿色主题
+                        secondary: '#E63946', // 辅助红色
+                        accent: '#FFD700', // 金色点缀
+                        neutral: '#F8F9FA', // 浅色背景
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .bg-texture {
+                background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%231e6b3a' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral bg-texture min-h-screen font-sans overflow-x-hidden">
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 left-0 w-full bg-primary/90 text-white shadow-lg z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-calendar-check-o text-2xl" aria-hidden="true"></i>
+                <h1 class="text-xl md:text-2xl font-bold">端午文化互动体验</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#" class="hover:text-accent transition-colors duration-300 flex items-center">
+                    <i class="fa fa-home mr-1" aria-hidden="true"></i> 首页
+                </a>
+                <a href="#about" class="hover:text-accent transition-colors duration-300 flex items-center">
+                    <i class="fa fa-info-circle mr-1" aria-hidden="true"></i> 端午介绍
+                </a>
+                <a href="#interactive" class="hover:text-accent transition-colors duration-300 flex items-center">
+                    <i class="fa fa-gamepad mr-1" aria-hidden="true"></i> 互动体验
+                </a>
+                <a href="#gallery" class="hover:text-accent transition-colors duration-300 flex items-center">
+                    <i class="fa fa-picture-o mr-1" aria-hidden="true"></i> 端午图库
+                </a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-white text-xl">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-primary/95 hidden transition-all duration-300">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#" class="hover:text-accent transition-colors duration-300 py-2 border-b border-white/20">
+                    <i class="fa fa-home mr-2" aria-hidden="true"></i> 首页
+                </a>
+                <a href="#about" class="hover:text-accent transition-colors duration-300 py-2 border-b border-white/20">
+                    <i class="fa fa-info-circle mr-2" aria-hidden="true"></i> 端午介绍
+                </a>
+                <a href="#interactive" class="hover:text-accent transition-colors duration-300 py-2 border-b border-white/20">
+                    <i class="fa fa-gamepad mr-2" aria-hidden="true"></i> 互动体验
+                </a>
+                <a href="#gallery" class="hover:text-accent transition-colors duration-300 py-2">
+                    <i class="fa fa-picture-o mr-2" aria-hidden="true"></i> 端午图库
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="pt-16">
+        <!-- 英雄区域 -->
+        <section class="relative h-[80vh] flex items-center justify-center overflow-hidden">
+            <div id="p5-container" class="absolute inset-0 z-0"></div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h2 class="text-[clamp(2.5rem,5vw,4rem)] font-bold text-white mb-6 text-shadow animate-[fadeIn_1s_ease-in-out]">
+                    端午安康
+                </h2>
+                <p class="text-[clamp(1rem,2vw,1.5rem)] text-white max-w-3xl mx-auto mb-8 text-shadow animate-[fadeIn_1.5s_ease-in-out]">
+                    体验传统节日的魅力，感受中华文化的深厚底蕴
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 animate-[fadeIn_2s_ease-in-out]">
+                    <button id="play-music" class="bg-secondary hover:bg-secondary/80 text-white px-8 py-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center">
+                        <i class="fa fa-music mr-2" aria-hidden="true"></i> 播放背景音乐
+                    </button>
+                    <button id="interactive-guide" class="bg-accent hover:bg-accent/80 text-primary px-8 py-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center">
+                        <i class="fa fa-hand-pointer-o mr-2" aria-hidden="true"></i> 互动指南
+                    </button>
+                </div>
+            </div>
+            <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-neutral to-transparent"></div>
+        </section>
+
+        <!-- 关于端午 -->
+        <section id="about" class="py-20 bg-neutral">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-primary mb-4">端午文化</h2>
+                    <div class="w-20 h-1 bg-secondary mx-auto mb-8"></div>
+                    <p class="text-gray-600 max-w-3xl mx-auto">端午节，又称端阳节、龙舟节等，是中国四大传统节日之一，起源于中国古代，最初为古代百越地区崇拜龙图腾的部族举行图腾祭祀的节日。</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <i class="fa fa-history text-2xl text-primary" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-primary mb-3 text-center">历史渊源</h3>
+                        <p class="text-gray-600">端午节起源于中国春秋战国时期，最初为古代百越地区崇拜龙图腾的部族举行图腾祭祀的节日。后因战国时期的楚国诗人屈原在五月初五跳汨罗江自尽，人们亦将端午节作为纪念屈原的节日。</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <i class="fa fa-cutlery text-2xl text-primary" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-primary mb-3 text-center">传统美食</h3>
+                        <p class="text-gray-600">端午节的传统食品是粽子，它是用糯米和各种馅料包裹在竹叶或芦苇叶中制成的。此外，还有雄黄酒、五黄、咸鸭蛋等传统食品，这些食品都有驱邪避灾的寓意。</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <i class="fa fa-users text-2xl text-primary" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-primary mb-3 text-center">节日习俗</h3>
+                        <p class="text-gray-600">端午节的主要习俗有赛龙舟、吃粽子、挂艾叶菖蒲、佩香囊、饮雄黄酒等。这些习俗不仅丰富了节日的文化内涵，也表达了人们驱邪避灾、祈求平安健康的美好愿望。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 互动体验区域 -->
+        <section id="interactive" class="py-20 bg-gradient-to-b from-primary/5 to-neutral">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-primary mb-4">音画互动体验</h2>
+                    <div class="w-20 h-1 bg-secondary mx-auto mb-8"></div>
+                    <p class="text-gray-600 max-w-3xl mx-auto">与端午元素互动，触发不同的视觉和声音效果，感受传统节日的魅力</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+                    <div class="p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <div class="md:w-1/3 bg-primary/5 rounded-lg p-6">
+                                <h3 class="text-xl font-bold text-primary mb-4">互动指南</h3>
+                                <ul class="space-y-4">
+                                    <li class="flex items-start">
+                                        <div class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">1</div>
+                                        <div>
+                                            <p class="font-medium">点击海报中的龙舟、粽子或艾草元素</p>
+                                            <p class="text-sm text-gray-600">点击不同元素会触发不同的动画和音效</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">2</div>
+                                        <div>
+                                            <p class="font-medium">移动鼠标改变互动元素的状态</p>
+                                            <p class="text-sm text-gray-600">鼠标悬停在元素上会有特殊效果</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">3</div>
+                                        <div>
+                                            <p class="font-medium">按键盘上的数字键1-3</p>
+                                            <p class="text-sm text-gray-600">不同数字键会触发不同的背景音效</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">4</div>
+                                        <div>
+                                            <p class="font-medium">双击屏幕任何位置</p>
+                                            <p class="text-sm text-gray-600">会随机生成一个端午祝福</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <div class="mt-8">
+                                    <h4 class="font-medium text-primary mb-3">当前音效</h4>
+                                    <div id="current-sound" class="bg-white p-3 rounded-lg shadow flex items-center">
+                                        <i class="fa fa-volume-off text-gray-400 mr-3" id="sound-icon"></i>
+                                        <span id="sound-text">未播放音效</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:w-2/3 relative">
+                                <div id="interactive-poster" class="bg-gradient-to-br from-primary/20 to-primary/40 rounded-lg overflow-hidden h-[500px] relative">
+                                    <!-- P5.js 互动海报将在这里渲染 -->
+                                </div>
+                                <div class="absolute top-4 right-4 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-lg cursor-pointer transition-all duration-300 hover:bg-white" id="reset-poster">
+                                    <i class="fa fa-refresh text-primary" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 端午图库 -->
+        <section id="gallery" class="py-20 bg-neutral">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-primary mb-4">端午图库</h2>
+                    <div class="w-20 h-1 bg-secondary mx-auto mb-8"></div>
+                    <p class="text-gray-600 max-w-3xl mx-auto">欣赏端午节相关的精美图片，感受传统节日的氛围</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:shadow-2xl">
+                        <img src="https://picsum.photos/seed/dragonboat1/600/400" alt="赛龙舟" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-white text-xl font-bold mb-2">赛龙舟</h3>
+                            <p class="text-white/80">端午节的重要习俗之一，象征着团结和勇气</p>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:shadow-2xl">
+                        <img src="https://picsum.photos/seed/dragonboat2/600/400" alt="包粽子" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-white text-xl font-bold mb-2">包粽子</h3>
+                            <p class="text-white/80">传统手艺，将糯米和馅料包裹在粽叶中</p>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:shadow-2xl">
+                        <img src="https://picsum.photos/seed/dragonboat3/600/400" alt="挂艾叶" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-white text-xl font-bold mb-2">挂艾叶</h3>
+                            <p class="text-white/80">端午习俗，有驱邪避灾的寓意</p>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:shadow-2xl">
+                        <img src="https://picsum.photos/seed/dragonboat4/600/400" alt="佩香囊" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-white text-xl font-bold mb-2">佩香囊</h3>
+                            <p class="text-white/80">端午节小孩佩香囊，有避邪驱瘟之意</p>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:shadow-2xl">
+                        <img src="https://picsum.photos/seed/dragonboat5/600/400" alt="雄黄酒" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-white text-xl font-bold mb-2">雄黄酒</h3>
+                            <p class="text-white/80">端午饮雄黄酒的习俗，用以驱虫解五毒</p>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:shadow-2xl">
+                        <img src="https://picsum.photos/seed/dragonboat6/600/400" alt="端午节" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h3 class="text-white text-xl font-bold mb-2">传统节日</h3>
+                            <p class="text-white/80">端午节是中国四大传统节日之一</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 祝福卡片生成器 -->
+        <section class="py-20 bg-primary/5">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-primary mb-4">端午祝福</h2>
+                    <div class="w-20 h-1 bg-secondary mx-auto mb-8"></div>
+                    <p class="text-gray-600 max-w-3xl mx-auto">生成专属端午祝福卡片，分享给亲朋好友</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-xl p-6 md:p-8 max-w-4xl mx-auto">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/2">
+                            <div class="mb-6">
+                                <label for="recipient" class="block text-gray-700 font-medium mb-2">祝福对象</label>
+                                <input type="text" id="recipient" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="输入对方名字">
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block text-gray-700 font-medium mb-2">祝福语</label>
+                                <textarea id="message" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="输入您的祝福..."></textarea>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-gray-700 font-medium mb-2">选择风格</label>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <button class="style-btn bg-primary/10 hover:bg-primary/20 text-primary p-3 rounded-lg transition-all flex flex-col items-center justify-center" data-style="1">
+                                        <i class="fa fa-paint-brush mb-2" aria-hidden="true"></i>
+                                        <span class="text-sm">传统风格</span>
+                                    </button>
+                                    <button class="style-btn bg-primary/10 hover:bg-primary/20 text-primary p-3 rounded-lg transition-all flex flex-col items-center justify-center" data-style="2">
+                                        <i class="fa fa-paint-brush mb-2" aria-hidden="true"></i>
+                                        <span class="text-sm">现代风格</span>
+                                    </button>
+                                    <button class="style-btn bg-primary/10 hover:bg-primary/20 text-primary p-3 rounded-lg transition-all flex flex-col items-center justify-center" data-style="3">
+                                        <i class="fa fa-paint-brush mb-2" aria-hidden="true"></i>
+                                        <span class="text-sm">简约风格</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <button id="generate-card" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-all flex items-center justify-center">
+                                <i class="fa fa-magic mr-2" aria-hidden="true"></i> 生成祝福卡片
+                            </button>
+                        </div>
+                        <div class="md:w-1/2 relative">
+                            <div id="card-preview" class="bg-gradient-to-br from-primary to-primary/70 rounded-xl p-6 h-80 flex flex-col items-center justify-center text-white shadow-lg relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-full h-full opacity-10">
+                                    <img src="https://picsum.photos/seed/dragonboatbg/600/400" alt="" class="w-full h-full object-cover">
+                                </div>
+                                <h3 class="text-2xl font-bold mb-6 text-center z-10" id="preview-recipient">致亲爱的朋友</h3>
+                                <p class="text-lg text-center mb-6 z-10 leading-relaxed" id="preview-message">愿您端午安康，生活如糯米粽般甜蜜，事业如龙舟竞渡般奋勇向前！</p>
+                                <p class="text-right z-10 w-full pr-4" id="preview-sender">端午祝福</p>
+                            </div>
+                            <div class="mt-4 flex justify-center">
+                                <button id="save-card" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-4 rounded-lg transition-all flex items-center justify-center mr-3">
+                                    <i class="fa fa-download mr-2" aria-hidden="true"></i> 保存卡片
+                                </button>
+                                <button id="share-card" class="bg-accent hover:bg-accent/90 text-primary font-medium py-2 px-4 rounded-lg transition-all flex items-center justify-center">
+                                    <i class="fa fa-share-alt mr-2" aria-hidden="true"></i> 分享卡片
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-primary text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">端午文化互动体验</h3>
+                    <p class="text-white/80 mb-4">探索传统节日的魅力，感受中华文化的深厚底蕴</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white hover:text-accent transition-colors">
+                            <i class="fa fa-weixin text-xl" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-accent transition-colors">
+                            <i class="fa fa-weibo text-xl" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-accent transition-colors">
+                            <i class="fa fa-instagram text-xl" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-accent transition-colors">
+                            <i class="fa fa-youtube-play text-xl" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-white/80 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="#about" class="text-white/80 hover:text-white transition-colors">端午介绍</a></li>
+                        <li><a href="#interactive" class="text-white/80 hover:text-white transition-colors">互动体验</a></li>
+                        <li><a href="#gallery" class="text-white/80 hover:text-white transition-colors">端午图库</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">联系我们</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker mt-1 mr-3" aria-hidden="true"></i>
+                            <span class="text-white/80">北京市朝阳区建国路88号</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-phone mt-1 mr-3" aria-hidden="true"></i>
+                            <span class="text-white/80">+86 10 8888 8888</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-envelope mt-1 mr-3" aria-hidden="true"></i>
+                            <span class="text-white/80">contact@dragonboat.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/20 mt-8 pt-8 text-center text-white/60">
+                <p>&copy; 2025 端午文化互动体验 | 保留所有权利</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 互动指南模态框 -->
+    <div id="guide-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold text-primary">互动指南</h3>
+                    <button id="close-guide" class="text-gray-400 hover:text-gray-600">
+                        <i class="fa fa-times text-xl" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="space-y-6">
+                    <div class="flex">
+                        <div class="bg-primary/10 rounded-full w-12 h-12 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fa fa-hand-pointer-o text-primary text-xl" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-primary mb-2">点击互动</h4>
+                            <p class="text-gray-600">点击海报中的龙舟、粽子或艾草元素，会触发不同的动画和音效效果。每个元素都有其独特的声音和视觉反馈。</p>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div class="bg-primary/10 rounded-full w-12 h-12 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fa fa-mouse-pointer text-primary text-xl" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-primary mb-2">鼠标悬停</h4>
+                            <p class="text-gray-600">将鼠标移动到互动元素上，会改变它们的状态，产生动态效果。尝试在不同元素上移动鼠标，观察它们的变化。</p>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div class="bg-primary/10 rounded-full w-12 h-12 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fa fa-keyboard-o text-primary text-xl" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-primary mb-2">键盘控制</h4>
+                            <p class="text-gray-600">按键盘上的数字键1-3，可以切换不同的背景音乐。每种音乐都代表端午节的不同氛围和元素。</p>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div class="bg-primary/10 rounded-full w-12 h-12 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fa fa-heart text-primary text-xl" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-primary mb-2">双击祝福</h4>
+                            <p class="text-gray-600">在互动区域双击，会随机生成一个端午节祝福，为您带来节日的喜悦和好运。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t flex justify-end">
+                <button id="got-it" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-all">
+                    我知道了
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 移动端菜单切换
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 滚动时导航栏样式变化
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('py-2');
+                header.classList.add('shadow-xl');
+            } else {
+                header.classList.remove('py-2');
+                header.classList.remove('shadow-xl');
+            }
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // 关闭移动菜单（如果打开）
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                    
+                    // 滚动到目标位置
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 互动指南模态框
+        document.getElementById('interactive-guide').addEventListener('click', function() {
+            document.getElementById('guide-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('close-guide').addEventListener('click', function() {
+            document.getElementById('guide-modal').classList.add('hidden');
+        });
+
+        document.getElementById('got-it').addEventListener('click', function() {
+            document.getElementById('guide-modal').classList.add('hidden');
+        });
+
+        // 祝福卡片生成器
+        document.getElementById('generate-card').addEventListener('click', function() {
+            const recipient = document.getElementById('recipient').value || '亲爱的朋友';
+            const message = document.getElementById('message').value || '愿您端午安康，生活如糯米粽般甜蜜，事业如龙舟竞渡般奋勇向前！';
+            
+            document.getElementById('preview-recipient').textContent = `致${recipient}`;
+            document.getElementById('preview-message').textContent = message;
+            
+            // 显示成功提示
+            this.innerHTML = '<i class="fa fa-check mr-2" aria-hidden="true"></i> 生成成功';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fa fa-magic mr-2" aria-hidden="true"></i> 生成祝福卡片';
+            }, 2000);
+        });
+
+        // 风格选择
+        document.querySelectorAll('.style-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除其他按钮的活跃状态
+                document.querySelectorAll('.style-btn').forEach(b => {
+                    b.classList.remove('bg-primary');
+                    b.classList.remove('text-white');
+                    b.classList.add('bg-primary/10');
+                    b.classList.add('text-primary');
+                });
+                
+                // 设置当前按钮的活跃状态
+                this.classList.remove('bg-primary/10');
+                this.classList.remove('text-primary');
+                this.classList.add('bg-primary');
+                this.classList.add('text-white');
+                
+                // 改变卡片预览样式
+                const style = this.getAttribute('data-style');
+                const cardPreview = document.getElementById('card-preview');
+                
+                if (style === '1') {
+                    cardPreview.className = 'bg-gradient-to-br from-primary to-primary/70 rounded-xl p-6 h-80 flex flex-col items-center justify-center text-white shadow-lg relative overflow-hidden';
+                } else if (style === '2') {
+                    cardPreview.className = 'bg-gradient-to-br from-secondary to-secondary/70 rounded-xl p-6 h-80 flex flex-col items-center justify-center text-white shadow-lg relative overflow-hidden';
+                } else if (style === '3') {
+                    cardPreview.className = 'bg-gradient-to-br from-gray-800 to-gray-700 rounded-xl p-6 h-80 flex flex-col items-center justify-center text-white shadow-lg relative overflow-hidden';
+                }
+            });
+        });
+
+        // 保存和分享卡片按钮
+        document.getElementById('save-card').addEventListener('click', function() {
+            alert('卡片已保存到相册！');
+        });
+
+        document.getElementById('share-card').addEventListener('click', function() {
+            alert('分享功能即将上线，敬请期待！');
+        });
+
+        // 互动海报重置按钮
+        document.getElementById('reset-poster').addEventListener('click', function() {
+            if (window.resetInteractivePoster) {
+                window.resetInteractivePoster();
+            }
+        });
+    </script>
+    <script>
+        // P5.js 互动海报代码
+        let mainMusic, dragonSound, zongziSound, aiYeSound;
+        let currentMusic = null;
+        let dragonBoats = [];
+        let zongzis = [];
+        let aiYes = [];
+        let blessings = [
+            "端午安康，愿您的生活如糯米粽般甜蜜！",
+            "龙舟破浪，祝您事业如龙舟竞渡般奋勇向前！",
+            "端午至，愿您安康吉祥，阖家幸福！",
+            "粽叶飘香，愿您的每一天都充满芬芳和喜悦！",
+            "端午佳节，愿您平安健康，一切顺遂！",
+            "愿您在端午节里，收获满满的快乐和幸福！",
+            "端午安康，愿您的生活像五彩丝线一样丰富多彩！",
+            "龙舟竞渡，祝您在人生的道路上勇往直前，永不退缩！",
+            "端午时节，愿您的心情如晴空般明朗，如湖水般平静！",
+            "吃粽有福，愿您在这个端午节里，福气满满，好运连连！"
+        ];
+        let currentBlessing = "";
+        let blessingVisible = false;
+        let blessingTimer = 0;
+        let backgroundImg;
+        let clouds = [];
+        let bubbles = [];
+        let isMusicPlaying = false;
+
+        // 预加载音频资源
+        function preload() {
+            // 这里使用示例音频URL，实际项目中应替换为真实音频文件
+            mainMusic = loadSound('https://samplelib.com/lib/preview/mp3/sample-6s.mp3');
+            dragonSound = loadSound('https://samplelib.com/lib/preview/mp3/sample-1s.mp3');
+            zongziSound = loadSound('https://samplelib.com/lib/preview/mp3/sample-1s.mp3');
+            aiYeSound = loadSound('https://samplelib.com/lib/preview/mp3/sample-1s.mp3');
+        }
+
+        // 初始化互动海报
+        function setup() {
+            const container = document.getElementById('interactive-poster');
+            const canvas = createCanvas(container.offsetWidth, container.offsetHeight);
+            canvas.parent(container);
+            
+            // 创建背景云
+            for (let i = 0; i < 5; i++) {
+                clouds.push(new Cloud(random(width), random(height/3), random(80, 150)));
+            }
+            
+            // 创建背景气泡
+            for (let i = 0; i < 20; i++) {
+                bubbles.push(new Bubble(random(width), random(height/2, height), random(5, 20)));
+            }
+            
+            // 创建龙舟
+            for (let i = 0; i < 3; i++) {
+                dragonBoats.push(new DragonBoat(random(width/4, width*3/4), random(height/3, height/2), random(80, 120)));
+            }
+            
+            // 创建粽子
+            for (let i = 0; i < 5; i++) {
+                zongzis.push(new Zongzi(random(width/4, width*3/4), random(height/2, height*2/3), random(30, 50)));
+            }
+            
+            // 创建艾草
+            for (let i = 0; i < 7; i++) {
+                aiYes.push(new AiYe(random(width/5, width*4/5), random(height*2/3, height-30), random(40, 70)));
+            }
+            
+            // 设置音频循环
+            mainMusic.setLoop(true);
+            
+            // 更新当前音效显示
+            updateSoundDisplay();
+        }
+
+        // 绘制互动海报
+        function draw() {
+            // 绘制背景
+            background(230, 245, 230);
+            
+            // 绘制渐变天空
+            for (let y = 0; y < height/3; y++) {
+                const inter = map(y, 0, height/3, 0, 1);
+                const c = lerpColor(color(135, 206, 235), color(230, 245, 230), inter);
+                stroke(c);
+                line(0, y, width, y);
+            }
+            
+            // 绘制水面
+            for (let y = height/2; y < height; y++) {
+                const inter = map(y, height/2, height, 0, 1);
+                const c = lerpColor(color(100, 180, 220), color(50, 150, 200), inter);
+                stroke(c);
+                line(0, y, width, y);
+            }
+            
+            // 绘制水波
+            noFill();
+            stroke(255, 255, 255, 80);
+            for (let i = 0; i < 5; i++) {
+                const offset = sin(frameCount * 0.02 + i) * 10;
+                beginShape();
+                for (let x = 0; x < width; x++) {
+                    const y = height/2 + sin(x * 0.02 + frameCount * 0.05 + i) * 15 + offset;
+                    vertex(x, y);
+                }
+                endShape();
+            }
+            
+            // 绘制云朵
+            for (let cloud of clouds) {
+                cloud.update();
+                cloud.display();
+            }
+            
+            // 绘制气泡
+            for (let bubble of bubbles) {
+                bubble.update();
+                bubble.display();
+            }
+            
+            // 绘制龙舟
+            for (let dragonBoat of dragonBoats) {
+                dragonBoat.update();
+                dragonBoat.display();
+            }
+            
+            // 绘制粽子
+            for (let zongzi of zongzis) {
+                zongzi.update();
+                zongzi.display();
+            }
+            
+            // 绘制艾草
+            for (let aiYe of aiYes) {
+                aiYe.update();
+                aiYe.display();
+            }
+            
+            // 绘制祝福
+            if (blessingVisible) {
+                push();
+                textAlign(CENTER, CENTER);
+                textSize(24);
+                fill(255, 255, 255);
+                stroke(0, 0, 0, 80);
+                strokeWeight(2);
+                text(currentBlessing, width/2, height/2);
+                
+                // 淡出效果
+                const alpha = map(blessingTimer, 0, 120, 255, 0);
+                fill(255, 255, 255, alpha);
+                noStroke();
+                rect(width/2 - textWidth(currentBlessing)/2 - 20, height/2 - 30, textWidth(currentBlessing) + 40, 60, 10);
+                
+                fill(0, 0, 0, alpha);
+                noStroke();
+                text(currentBlessing, width/2, height/2);
+                
+                blessingTimer++;
+                if (blessingTimer > 120) {
+                    blessingVisible = false;
+                }
+                pop();
+            }
+        }
+
+        // 鼠标点击事件
+        function mousePressed() {
+            // 检查是否点击了龙舟
+            for (let dragonBoat of dragonBoats) {
+                if (dragonBoat.isMouseOver(mouseX, mouseY)) {
+                    dragonBoat.interact();
+                    playSound(dragonSound);
+                    return;
+                }
+            }
+            
+            // 检查是否点击了粽子
+            for (let zongzi of zongzis) {
+                if (zongzi.isMouseOver(mouseX, mouseY)) {
+                    zongzi.interact();
+                    playSound(zongziSound);
+                    return;
+                }
+            }
+            
+            // 检查是否点击了艾草
+            for (let aiYe of aiYes) {
+                if (aiYe.isMouseOver(mouseX, mouseY)) {
+                    aiYe.interact();
+                    playSound(aiYeSound);
+                    return;
+                }
+            }
+        }
+
+        // 双击事件 - 显示随机祝福
+        function doubleClicked() {
+            currentBlessing = random(blessings);
+            blessingVisible = true;
+            blessingTimer = 0;
+        }
+
+        // 键盘按下事件
+        function keyPressed() {
+            // 数字键1-3切换背景音乐
+            if (key >= '1' && key <= '3') {
+                // 这里使用同一个音频作为示例，实际项目中应替换为不同的音频
+                if (currentMusic) {
+                    currentMusic.stop();
+                }
+                
+                if (key === '1') {
+                    currentMusic = mainMusic;
+                    updateSoundDisplay("传统音乐");
+                } else if (key === '2') {
+                    currentMusic = mainMusic; // 替换为实际的第二种音乐
+                    updateSoundDisplay("现代音乐");
+                } else if (key === '3') {
+                    currentMusic = mainMusic; // 替换为实际的第三种音乐
+                    updateSoundDisplay("轻音乐");
+                }
+                
+                if (currentMusic) {
+                    currentMusic.play();
+                    isMusicPlaying = true;
+                    document.getElementById('play-music').innerHTML = '<i class="fa fa-pause mr-2" aria-hidden="true"></i> 暂停背景音乐';
+                }
+            }
+        }
+
+        // 播放音效
+        function playSound(sound) {
+            if (sound.isPlaying()) {
+                sound.stop();
+            }
+            sound.play();
+        }
+
+        // 切换背景音乐播放状态
+        document.getElementById('play-music').addEventListener('click', function() {
+            if (!currentMusic) {
+                currentMusic = mainMusic;
+                updateSoundDisplay("传统音乐");
+            }
+            
+            if (isMusicPlaying) {
+                currentMusic.pause();
+                isMusicPlaying = false;
+                this.innerHTML = '<i class="fa fa-music mr-2" aria-hidden="true"></i> 播放背景音乐';
+            } else {
+                currentMusic.play();
+                isMusicPlaying = true;
+                this.innerHTML = '<i class="fa fa-pause mr-2" aria-hidden="true"></i> 暂停背景音乐';
+            }
+        });
+
+        // 更新当前音效显示
+        function updateSoundDisplay(text = "未播放音效") {
+            const soundIcon = document.getElementById('sound-icon');
+            const soundText = document.getElementById('sound-text');
+            
+            if (text === "未播放音效") {
+                soundIcon.className = 'fa fa-volume-off text-gray-400 mr-3';
+            } else {
+                soundIcon.className = 'fa fa-volume-up text-primary mr-3';
+            }
+            
+            soundText.textContent = text;
+        }
+
+        // 重置互动海报
+        window.resetInteractivePoster = function() {
+            // 停止所有音效
+            if (currentMusic) {
+                currentMusic.stop();
+            }
+            dragonSound.stop();
+            zongziSound.stop();
+            aiYeSound.stop();
+            
+            // 重置变量
+            dragonBoats = [];
+            zongzis = [];
+            aiYes = [];
+            clouds = [];
+            bubbles = [];
+            isMusicPlaying = false;
+            currentMusic = null;
+            blessingVisible = false;
+            
+            // 更新UI
+            updateSoundDisplay();
+            document.getElementById('play-music').innerHTML = '<i class="fa fa-music mr-2" aria-hidden="true"></i> 播放背景音乐';
+            
+            // 重新创建元素
+            for (let i = 0; i < 5; i++) {
+                clouds.push(new Cloud(random(width), random(height/3), random(80, 150)));
+            }
+            
+            for (let i = 0; i < 20; i++) {
+                bubbles.push(new Bubble(random(width), random(height/2, height), random(5, 20)));
+            }
+            
+            for (let i = 0; i < 3; i++) {
+                dragonBoats.push(new DragonBoat(random(width/4, width*3/4), random(height/3, height/2), random(80, 120)));
+            }
+            
+            for (let i = 0; i < 5; i++) {
+                zongzis.push(new Zongzi(random(width/4, width*3/4), random(height/2, height*2/3), random(30, 50)));
+            }
+            
+            for (let i = 0; i < 7; i++) {
+                aiYes.push(new AiYe(random(width/5, width*4/5), random(height*2/3, height-30), random(40, 70)));
+            }
+        };
+
+        // 云朵类
+        class Cloud {
+            constructor(x, y, size) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.speed = random(0.1, 0.3);
+            }
+            
+            update() {
+                this.x += this.speed;
+                if (this.x > width + this.size/2) {
+                    this.x = -this.size/2;
+                    this.y = random(height/3);
+                }
+            }
+            
+            display() {
+                push();
+                translate(this.x, this.y);
+                
+                noStroke();
+                fill(255, 255, 255, 200);
+                
+                // 绘制云朵
+                ellipse(0, 0, this.size, this.size*0.7);
+                ellipse(-this.size*0.3, -this.size*0.2, this.size*0.6, this.size*0.6);
+                ellipse(this.size*0.3, -this.size*0.2, this.size*0.6, this.size*0.6);
+                ellipse(-this.size*0.5, 0, this.size*0.4, this.size*0.4);
+                ellipse(this.size*0.5, 0, this.size*0.4, this.size*0.4);
+                
+                pop();
+            }
+        }
+
+        // 气泡类
+        class Bubble {
+            constructor(x, y, size) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.speed = random(0.1, 0.5);
+                this.oscillation = random(0.01, 0.03);
+                this.oscillationOffset = random(TWO_PI);
+            }
+            
+            update() {
+                this.y -= this.speed;
+                this.x += sin(frameCount * this.oscillation + this.oscillationOffset);
+                
+                if (this.y < height/2 - this.size) {
+                    this.y = random(height*0.8, height);
+                    this.x = random(width);
+                }
+            }
+            
+            display() {
+                push();
+                translate(this.x, this.y);
+                
+                noFill();
+                stroke(255, 255, 255, 100);
+                strokeWeight(1);
+                ellipse(0, 0, this.size);
+                
+                // 气泡高光
+                noStroke();
+                fill(255, 255, 255, 150);
+                ellipse(-this.size*0.25, -this.size*0.25, this.size*0.3);
+                
+                pop();
+            }
+        }
+
+        // 龙舟类
+        class DragonBoat {
+            constructor(x, y, size) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.angle = 0;
+                this.originalY = y;
+                this.bobSpeed = 0.05;
+                this.bobHeight = 5;
+                this.isInteracted = false;
+                this.interactionTimer = 0;
+            }
+            
+            update() {
+                // 上下浮动
+                this.y = this.originalY + sin(frameCount * this.bobSpeed) * this.bobHeight;
+                
+                // 互动效果
+                if (this.isInteracted) {
+                    this.angle = sin(this.interactionTimer * 0.2) * 0.2;
+                    this.interactionTimer++;
+                    
+                    if (this.interactionTimer > 60) {
+                        this.isInteracted = false;
+                        this.interactionTimer = 0;
+                    }
+                } else {
+                    // 轻微摇晃
+                    this.angle = sin(frameCount * 0.05) * 0.05;
+                }
+            }
+            
+            display() {
+                push();
+                translate(this.x, this.y);
+                rotate(this.angle);
+                
+                // 龙舟主体
+                fill(230, 57, 70); // 红色
+                beginShape();
+                vertex(-this.size*0.5, 0);
+                vertex(-this.size*0.3, -this.size*0.2);
+                vertex(this.size*0.3, -this.size*0.2);
+                vertex(this.size*0.5, 0);
+                vertex(this.size*0.3, this.size*0.1);
+                vertex(-this.size*0.3, this.size*0.1);
+                endShape(CLOSE);
+                
+                // 龙舟龙头
+                fill(255, 215, 0); // 金色
+                beginShape();
+                vertex(this.size*0.5, 0);
+                vertex(this.size*0.7, -this.size*0.1);
+                vertex(this.size*0.8, -this.size*0.2);
+                vertex(this.size*0.7, -this.size*0.3);
+                vertex(this.size*0.5, -this.size*0.2);
+                endShape(CLOSE);
+                
+                // 龙眼
+                fill(0);
+                ellipse(this.size*0.65, -this.size*0.2, this.size*0.05);
+                
+                // 龙舟龙尾
+                fill(255, 215, 0); // 金色
+                beginShape();
+                vertex(-this.size*0.5, 0);
+                vertex(-this.size*0.7, -this.size*0.1);
+                vertex(-this.size*0.8, -this.size*0.2);
+                vertex(-this.size*0.7, -this.size*0.3);
+                vertex(-this.size*0.5, -this.size*0.2);
+                endShape(CLOSE);
+                
+                // 龙舟桨
+                stroke(139, 69, 19); // 棕色
+                strokeWeight(this.size*0.03);
+                line(-this.size*0.2, -this.size*0.2, -this.size*0.2, -this.size*0.5);
+                line(0, -this.size*0.2, 0, -this.size*0.55);
+                line(this.size*0.2, -this.size*0.2, this.size*0.2, -this.size*0.5);
+                
+                // 龙舟旗
+                fill(230, 57, 70); // 红色
+                beginShape();
+                vertex(0, -this.size*0.55);
+                vertex(this.size*0.15, -this.size*0.7);
+                vertex(0, -this.size*0.85);
+                vertex(-this.size*0.05, -this.size*0.7);
+                endShape(CLOSE);
+                
+                pop();
+            }
+            
+            isMouseOver(mx, my) {
+                const d = dist(mx, my, this.x, this.y);
+                return d < this.size*0.5;
+            }
+            
+            interact() {
+                this.isInteracted = true;
+                this.interactionTimer = 0;
+            }
+        }
+
+        // 粽子类
+        class Zongzi {
+            constructor(x, y, size) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.angle = 0;
+                this.originalAngle = random(-0.1, 0.1);
+                this.swingSpeed = 0.03;
+                this.isInteracted = false;
+                this.interactionTimer = 0;
+            }
+            
+            update() {
+                // 摇摆
+                if (!this.isInteracted) {
+                    this.angle = this.originalAngle + sin(frameCount * this.swingSpeed) * 0.05;
+                } else {
+                    this.angle = this.originalAngle + sin(this.interactionTimer * 0.2) * 0.2;
+                    this.interactionTimer++;
+                    
+                    if (this.interactionTimer > 60) {
+                        this.isInteracted = false;
+                        this.interactionTimer = 0;
+                    }
+                }
+            }
+            
+            display() {
+                push();
+                translate(this.x, this.y);
+                rotate(this.angle);
+                
+                // 粽叶
+                fill(61, 145, 64); // 绿色
+                beginShape();
+                vertex(-this.size*0.5, -this.size*0.3);
+                vertex(this.size*0.5, -this.size*0.2);
+                vertex(this.size*0.4, this.size*0.3);
+                vertex(-this.size*0.4, this.size*0.4);
+                endShape(CLOSE);
+                
+                // 粽绳
+                stroke(139, 69, 19); // 棕色
+                strokeWeight(this.size*0.03);
+                line(-this.size*0.2, -this.size*0.2, this.size*0.3, 0);
+                line(-this.size*0.3, 0, this.size*0.2, this.size*0.2);
+                
+                // 粽子
+                fill(245, 222, 179); // 小麦色
+                beginShape();
+                vertex(-this.size*0.3, -this.size*0.2);
+                vertex(this.size*0.3, -this.size*0.1);
+                vertex(this.size*0.25, this.size*0.25);
+                vertex(-this.size*0.25, this.size*0.3);
+                endShape(CLOSE);
+                
+                pop();
+            }
+            
+            isMouseOver(mx, my) {
+                const d = dist(mx, my, this.x, this.y);
+                return d < this.size*0.5;
+            }
+            
+            interact() {
+                this.isInteracted = true;
+                this.interactionTimer = 0;
+            }
+        }
+
+        // 艾草类
+        class AiYe {
+            constructor(x, y, size) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.angle = 0;
+                this.originalAngle = random(-0.1, 0.1);
+                this.swingSpeed = 0.02 + random(0.01);
+                this.isInteracted = false;
+                this.interactionTimer = 0;
+            }
+            
+            update() {
+                // 摇摆
+                if (!this.isInteracted) {
+                    this.angle = this.originalAngle + sin(frameCount * this.swingSpeed) * 0.05;
+                } else {
+                    this.angle = this.originalAngle + sin(this.interactionTimer * 0.2) * 0.2;
+                    this.interactionTimer++;
+                    
+                    if (this.interactionTimer > 60) {
+                        this.isInteracted = false;
+                        this.interactionTimer = 0;
+                    }
+                }
+            }
+            
+            display() {
+                push();
+                translate(this.x, this.y);
+                rotate(this.angle);
+                
+                // 艾草根茎
+                stroke(61, 145, 64); // 绿色
+                strokeWeight(this.size*0.05);
+                line(0, 0, 0, -this.size);
+                
+                // 艾草叶子
+                this.drawLeaf(0, -this.size*0.9, this.size*0.4, 0.3);
+                this.drawLeaf(0, -this.size*0.7, this.size*0.5, -0.2);
+                this.drawLeaf(0, -this.size*0.5, this.size*0.45, 0.2);
+                this.drawLeaf(0, -this.size*0.3, this.size*0.4, -0.1);
+                
+                pop();
+            }
+            
+            drawLeaf(x, y, size, angle) {
+                push();
+                translate(x, y);
+                rotate(angle);
+                
+                fill(61, 145, 64); // 绿色
+                beginShape();
+                
+                // 叶子轮廓
+                let points = 10;
+                for (let i = 0; i < points; i++) {
+                    let a = map(i, 0, points, 0, PI);
+                    let r = size * (0.5 + 0.5 * sin(a * 2));
+                    let px = r * cos(a);
+                    let py = r * sin(a);
+                    vertex(px, py);
+                }
+                
+                for (let i = 0; i < points; i++) {
+                    let a = map(i, 0, points, PI, TWO_PI);
+                    let r = size * (0.3 + 0.3 * sin(a * 2));
+                    let px = r * cos(a);
+                    let py = r * sin(a);
+                    vertex(px, py);
+                }
+                
+                endShape(CLOSE);
+                
+                // 叶脉
+                stroke(255, 255, 255, 100);
+                strokeWeight(size*0.03);
+                line(0, 0, 0, size*0.7);
+                
+                pop();
+            }
+            
+            isMouseOver(mx, my) {
+                const d = dist(mx, my, this.x, this.y);
+                return d < this.size*0.6;
+            }
+            
+            interact() {
+                this.isInteracted = true;
+                this.interactionTimer = 0;
+            }
+        }
+
+        // 创建主页面的P5.js实例
+        let mainSketch = new p5((p) => {
+            p.preload = preload;
+            p.setup = setup;
+            p.draw = draw;
+            p.mousePressed = mousePressed;
+            p.doubleClicked = doubleClicked;
+            p.keyPressed = keyPressed;
+        }, 'p5-container');
+    </script>
+</body>
+</html>    
